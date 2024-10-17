@@ -2,9 +2,9 @@
 
 namespace Bi3\LaraVault\Tests;
 
+use Bi3\LaraVault\LaraVaultServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Bi3\LaraVault\LaraVaultServiceProvider;
 
 class TestCase extends Orchestra
 {

@@ -2,9 +2,9 @@
 
 namespace Bi3\LaraVault;
 
+use Bi3\LaraVault\Commands\LaraVaultCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Bi3\LaraVault\Commands\LaraVaultCommand;
 
 class LaraVaultServiceProvider extends PackageServiceProvider
 {
