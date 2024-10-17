@@ -1,5 +1,5 @@
 <?php
 
-namespace Bi3\LaraVault;
+namespace Voidoflimbo\LaraVault;
 
 class LaraVault {}

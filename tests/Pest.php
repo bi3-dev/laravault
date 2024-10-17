@@ -1,5 +1,5 @@
 <?php
 
-use Bi3\LaraVault\Tests\TestCase;
+use Voidoflimbo\LaraVault\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

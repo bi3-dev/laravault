@@ -1,8 +1,8 @@
 <?php
 
-namespace Bi3\LaraVault\Tests;
+namespace Voidoflimbo\LaraVault\Tests;
 
-use Bi3\LaraVault\LaraVaultServiceProvider;
+use Voidoflimbo\LaraVault\LaraVaultServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Bi3\\LaraVault\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Voidoflimbo\\LaraVault\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

@@ -2,7 +2,7 @@
     "name": "bipin/laravault",
     "description": "A vault where all Laravel reusable components reside.",
     "keywords": [
-        "Bi3",
+        "Voidoflimbo",
         "laravel",
         "laravault"
     ],
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Bi3\\LaraVault\\": "src/",
-            "Bi3\\LaraVault\\Database\\Factories\\": "database/factories/"
+            "Voidoflimbo\\LaraVault\\": "src/",
+            "Voidoflimbo\\LaraVault\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Bi3\\LaraVault\\Tests\\": "tests/",
+            "Voidoflimbo\\LaraVault\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -73,10 +73,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Bi3\\LaraVault\\LaraVaultServiceProvider"
+                "Voidoflimbo\\LaraVault\\LaraVaultServiceProvider"
             ],
             "aliases": {
-                "LaraVault": "Bi3\\LaraVault\\Facades\\LaraVault"
+                "LaraVault": "Voidoflimbo\\LaraVault\\Facades\\LaraVault"
             }
         }
     },

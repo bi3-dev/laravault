@@ -52,8 +52,8 @@ php artisan vendor:publish --tag="laravault-views"
 ## Usage
 
 ```php
-$laraVault = new Bi3\LaraVault();
-echo $laraVault->echoPhrase('Hello, Bi3!');
+$laraVault = new Voidoflimbo\LaraVault();
+echo $laraVault->echoPhrase('Hello, Voidoflimbo!');
 ```
 
 ## Testing

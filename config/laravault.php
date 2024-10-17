@@ -1,6 +1,6 @@
 <?php
 
-// config for Bi3/LaraVault
+// config for Voidoflimbo/LaraVault
 return [
 
 ];

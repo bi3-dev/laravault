@@ -1,6 +1,6 @@
 <?php
 
-namespace Bi3\LaraVault\Database\Factories;
+namespace Voidoflimbo\LaraVault\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
