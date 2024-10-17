@@ -2,12 +2,11 @@
 
 namespace Voidoflimbo\LaraVault;
 
-use Voidoflimbo\LaraVault\Commands\LaraVaultCommand;
-use Spatie\LaravelPackageTools\Package;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class LaraVaultServiceProvider extends PackageServiceProvider
 {
@@ -18,12 +17,11 @@ class LaraVaultServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasInstallCommand(
-                fn(InstallCommand $command) =>
-                $command
-                    ->startWith(fn(InstallCommand $command) => $this->runInstallCommand($command))
+                fn (InstallCommand $command) => $command
+                    ->startWith(fn (InstallCommand $command) => $this->runInstallCommand($command))
                     ->publishMigrations()
                     ->askToRunMigrations()
-                    ->endWith(fn(InstallCommand $command) => $this->informUser($command))
+                    ->endWith(fn (InstallCommand $command) => $this->informUser($command))
             );
     }
 
@@ -32,11 +30,11 @@ class LaraVaultServiceProvider extends PackageServiceProvider
         parent::boot();
 
         // Register the views
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views/voidoflimbo', 'voidoflimbo');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views/voidoflimbo', 'voidoflimbo');
 
         // Register anonymous Blade components
         // Blade::anonymousComponentNamespace('laravault::components', 'voidoflimbo');
-        Blade::anonymousComponentPath(__DIR__ . '/../../resources/views/voidoflimbo', 'voidoflimbo');
+        Blade::anonymousComponentPath(__DIR__.'/../../resources/views/voidoflimbo', 'voidoflimbo');
     }
 
     protected function runInstallCommand(InstallCommand $command)

@@ -2,9 +2,9 @@
 
 namespace Voidoflimbo\LaraVault\Tests;
 
-use Voidoflimbo\LaraVault\LaraVaultServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Voidoflimbo\LaraVault\LaraVaultServiceProvider;
 
 class TestCase extends Orchestra
 {

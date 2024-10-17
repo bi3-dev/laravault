@@ -9,17 +9,18 @@ use Symfony\Component\Process\Process;
 class LaraVaultCommand extends Command
 {
     protected $signature = 'laravault:install';
+
     protected $description = 'Install Breeze, Livewire and copy reusable resources.';
 
     public function handle()
     {
         $this->info('Installing Laravel Breeze...');
-        if (!$this->runProcess(['composer', 'require', 'laravel/breeze', '--dev'])) {
+        if (! $this->runProcess(['composer', 'require', 'laravel/breeze', '--dev'])) {
             return 1;
         }
 
         $this->info('Publishing Breeze scaffolding...');
-        if (!$this->runProcess(['php', 'artisan', 'breeze:install'])) {
+        if (! $this->runProcess(['php', 'artisan', 'breeze:install'])) {
             return 1;
         }
 
@@ -30,7 +31,7 @@ class LaraVaultCommand extends Command
         );
 
         $this->info('Installing Livewire...');
-        if (!$this->runProcess(['composer', 'require', 'livewire/livewire'])) {
+        if (! $this->runProcess(['composer', 'require', 'livewire/livewire'])) {
             return 1;
         }
 
@@ -41,6 +42,7 @@ class LaraVaultCommand extends Command
         );
 
         $this->info('LaraVault installation complete.');
+
         return 0;
     }
 
@@ -49,8 +51,9 @@ class LaraVaultCommand extends Command
         $process = new Process($command);
         $process->run();
 
-        if (!$process->isSuccessful()) {
-            $this->error('Failed to execute: ' . implode(' ', $command));
+        if (! $process->isSuccessful()) {
+            $this->error('Failed to execute: '.implode(' ', $command));
+
             return false;
         }
 
@@ -77,7 +80,6 @@ class LaraVaultCommand extends Command
 
     protected function packageResourcePath($path)
     {
-        return __DIR__ . '/../../resources/' . $path;
+        return __DIR__.'/../../resources/'.$path;
     }
 }
-
