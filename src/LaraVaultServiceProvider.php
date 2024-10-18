@@ -2,9 +2,7 @@
 
 namespace Voidoflimbo\LaraVault;
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Voidoflimbo\LaraVault\Commands\LaraVaultCommand;
@@ -28,6 +26,6 @@ class LaraVaultServiceProvider extends PackageServiceProvider
         // $this->loadViewsFrom(__DIR__ . '/../../resources/views/voidoflimbo', 'voidoflimbo');
 
         // Register anonymous Blade components
-        Blade::anonymousComponentPath(__DIR__ . '/../../resources/views/voidoflimbo', 'voidoflimbo');
+        Blade::anonymousComponentPath(__DIR__.'/../../resources/views/voidoflimbo', 'voidoflimbo');
     }
 }
