@@ -59,7 +59,7 @@ class LaraVaultCommand extends Command
         $process->run();
 
         if (! $process->isSuccessful()) {
-            $this->error('Failed to execute: ' . implode(' ', $command));
+            $this->error('Failed to execute: '.implode(' ', $command));
 
             return false;
         }
@@ -87,6 +87,6 @@ class LaraVaultCommand extends Command
 
     protected function packageResourcePath($path)
     {
-        return __DIR__ . '/../../resources/' . $path;
+        return __DIR__.'/../../resources/'.$path;
     }
 }
