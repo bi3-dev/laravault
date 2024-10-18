@@ -1,12 +1,12 @@
 {
-    "name": "bipin/laravault",
+    "name": "bi3-dev/laravault",
     "description": "A vault where all Laravel reusable components reside.",
     "keywords": [
         "Voidoflimbo",
         "laravel",
         "laravault"
     ],
-    "homepage": "https://github.com/bipin/laravault",
+    "homepage": "https://github.com/bi3-dev/laravault",
     "license": "MIT",
     "authors": [
         {
