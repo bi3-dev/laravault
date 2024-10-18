@@ -17,11 +17,17 @@ class LaraVaultServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasInstallCommand(
-                fn (InstallCommand $command) => $command
-                    ->startWith(fn (InstallCommand $command) => $this->runInstallCommand($command))
-                    ->publishMigrations()
-                    ->askToRunMigrations()
-                    ->endWith(fn (InstallCommand $command) => $this->informUser($command))
+                function (InstallCommand $command) {
+                    $command
+                        ->startWith(function (InstallCommand $command) {
+                            return $this->runInstallCommand($command);
+                        })
+                        ->publishMigrations()
+                        ->askToRunMigrations()
+                        ->endWith(function (InstallCommand $command) {
+                            return $this->informUser($command);
+                        });
+                }
             );
     }
 
@@ -30,11 +36,11 @@ class LaraVaultServiceProvider extends PackageServiceProvider
         parent::boot();
 
         // Register the views
-        $this->loadViewsFrom(__DIR__.'/../../resources/views/voidoflimbo', 'voidoflimbo');
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views/voidoflimbo', 'voidoflimbo');
 
         // Register anonymous Blade components
         // Blade::anonymousComponentNamespace('laravault::components', 'voidoflimbo');
-        Blade::anonymousComponentPath(__DIR__.'/../../resources/views/voidoflimbo', 'voidoflimbo');
+        Blade::anonymousComponentPath(__DIR__ . '/../../resources/views/voidoflimbo', 'voidoflimbo');
     }
 
     protected function runInstallCommand(InstallCommand $command)
