@@ -2,6 +2,10 @@
 
 All notable changes to `laravault` will be documented in this file.
 
+## V 0.0.5 - 2024-10-18
+
+Included missing piece of puzzles and changed php to sail
+
 ## v 0.0.4 - 2024-10-18
 
 WIP
