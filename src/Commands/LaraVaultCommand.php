@@ -20,7 +20,7 @@ class LaraVaultCommand extends Command
         }
 
         $this->info('Publishing Breeze scaffolding...');
-        if (! $this->runProcess(['sail', 'artisan', 'breeze:install', 'blade', '--pest'])) {
+        if (! $this->runProcess(['./vendor/bin/sail', 'artisan', 'breeze:install', 'blade', '--pest'])) {
             return 1;
         }
 
@@ -59,8 +59,9 @@ class LaraVaultCommand extends Command
         $process->run();
 
         if (! $process->isSuccessful()) {
-            $this->error('Failed to execute: '.implode(' ', $command));
-
+            $this->error('Failed to execute: ' . implode(' ', $command));
+            $this->error($process->getErrorOutput());
+            $this->info($process->getOutput());
             return false;
         }
 
@@ -87,6 +88,6 @@ class LaraVaultCommand extends Command
 
     protected function packageResourcePath($path)
     {
-        return __DIR__.'/../../resources/'.$path;
+        return __DIR__ . '/../../resources/' . $path;
     }
 }
