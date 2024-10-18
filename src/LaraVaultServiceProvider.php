@@ -36,11 +36,11 @@ class LaraVaultServiceProvider extends PackageServiceProvider
         parent::boot();
 
         // Register the views
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views/voidoflimbo', 'voidoflimbo');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views/voidoflimbo', 'voidoflimbo');
 
         // Register anonymous Blade components
         // Blade::anonymousComponentNamespace('laravault::components', 'voidoflimbo');
-        Blade::anonymousComponentPath(__DIR__ . '/../../resources/views/voidoflimbo', 'voidoflimbo');
+        Blade::anonymousComponentPath(__DIR__.'/../../resources/views/voidoflimbo', 'voidoflimbo');
     }
 
     protected function runInstallCommand(InstallCommand $command)
