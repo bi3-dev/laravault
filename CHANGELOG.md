@@ -2,6 +2,10 @@
 
 All notable changes to `laravault` will be documented in this file.
 
+## V 0.0.8 - 2024-10-18
+
+Changed sail command back to php
+
 ## V 0.0.7 - 2024-10-18
 
 full path for sail and more debug output
