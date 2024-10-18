@@ -20,14 +20,14 @@ class LaraVaultCommand extends Command
         }
 
         $this->info('Publishing Breeze scaffolding...');
-        if (! $this->runProcess(['php', 'artisan', 'breeze:install'])) {
+        if (! $this->runProcess(['sail', 'artisan', 'breeze:install'])) {
             return 1;
         }
 
         $this->info('Replacing Breeze Blade files with custom files...');
         $this->replaceFiles(
             resource_path('views/auth'),
-            $this->packageResourcePath('views')
+            $this->packageResourcePath('views/auth')
         );
 
         $this->info('Installing Livewire...');
@@ -43,8 +43,12 @@ class LaraVaultCommand extends Command
 
         $this->info('LaraVault installation complete.');
         $this->info('Please run the following commands to complete the setup:');
-        $this->info('npm install');
-        $this->info('npm run dev');
+        $this->info('- npm install');
+        $this->info('- npm run dev');
+        $this->info('Also please copy these images in public/img');
+        $this->info('- logo.png');
+        $this->info('- logo.ico');
+        $this->info('- login_bg.png');
 
         return 0;
     }
@@ -55,7 +59,7 @@ class LaraVaultCommand extends Command
         $process->run();
 
         if (! $process->isSuccessful()) {
-            $this->error('Failed to execute: '.implode(' ', $command));
+            $this->error('Failed to execute: ' . implode(' ', $command));
 
             return false;
         }
@@ -83,6 +87,6 @@ class LaraVaultCommand extends Command
 
     protected function packageResourcePath($path)
     {
-        return __DIR__.'/../../resources/'.$path;
+        return __DIR__ . '/../../resources/' . $path;
     }
 }
