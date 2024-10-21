@@ -2,6 +2,10 @@
 
 All notable changes to `laravault` will be documented in this file.
 
+## V 0.0.10-alfa - 2024-10-21
+
+New Command structure and base functionality testing
+
 ## V 0.0.9 - 2024-10-18
 
 Improved logic for running process
