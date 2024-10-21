@@ -59,20 +59,20 @@ class LaraVaultCommand extends Command
         info('app.js Replaced !');
 
         // Replace the public directory
-        info('Replacing app.js file...');
+        info('Replacing logo, icon and background images...');
         $this->replaceFiles(
-            public_path('img/logo.ico'),
+            resource_path('img/logo.ico'),
             $this->packagePublicPath('img/logo.ico')
         );
         $this->replaceFiles(
-            public_path('img/logo.png'),
+            resource_path('img/logo.png'),
             $this->packagePublicPath('img/logo.png')
         );
         $this->replaceFiles(
-            public_path('img/login_bg.png'),
+            resource_path('img/login_bg.png'),
             $this->packagePublicPath('img/login_bg.png')
         );
-        info('app.js Replaced !');
+        info('logo, icon and background images Replaced !');
 
         // Copy over the Blade anonymous components
         info('Copying anonymous blade components');
@@ -120,12 +120,12 @@ class LaraVaultCommand extends Command
             try {
                 $process->setTty(true);
             } catch (RuntimeException $e) {
-                $this->output->writeln('  <bg=yellow;fg=black> WARN </> '.$e->getMessage().PHP_EOL);
+                $this->output->writeln('  <bg=yellow;fg=black> WARN </> ' . $e->getMessage() . PHP_EOL);
             }
         }
 
         $process->run(function ($type, $line) {
-            $this->output->write('    '.$line);
+            $this->output->write('    ' . $line);
         });
     }
 
@@ -148,7 +148,7 @@ class LaraVaultCommand extends Command
         });
 
         if (! $process->isSuccessful()) {
-            error('Failed to execute: '.implode(' ', $command));
+            error('Failed to execute: ' . implode(' ', $command));
 
             return false;
         }
@@ -190,7 +190,7 @@ class LaraVaultCommand extends Command
      */
     protected function packageResourcePath($path)
     {
-        return __DIR__.'/../../resources/'.$path;
+        return __DIR__ . '/../../resources/' . $path;
     }
 
     /**
@@ -201,6 +201,6 @@ class LaraVaultCommand extends Command
      */
     protected function packagePublicPath($path)
     {
-        return __DIR__.'/../../public/'.$path;
+        return __DIR__ . '/../../public/' . $path;
     }
 }
