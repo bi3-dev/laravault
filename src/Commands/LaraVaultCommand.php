@@ -61,15 +61,15 @@ class LaraVaultCommand extends Command
         // Replace the public directory
         info('Replacing logo, icon and background images...');
         $this->replaceFiles(
-            resource_path('img/logo.ico'),
+            public_path('img/logo.ico'),
             $this->packagePublicPath('img/logo.ico')
         );
         $this->replaceFiles(
-            resource_path('img/logo.png'),
+            public_path('img/logo.png'),
             $this->packagePublicPath('img/logo.png')
         );
         $this->replaceFiles(
-            resource_path('img/login_bg.png'),
+            public_path('img/login_bg.png'),
             $this->packagePublicPath('img/login_bg.png')
         );
         info('logo, icon and background images Replaced !');
@@ -120,12 +120,12 @@ class LaraVaultCommand extends Command
             try {
                 $process->setTty(true);
             } catch (RuntimeException $e) {
-                $this->output->writeln('  <bg=yellow;fg=black> WARN </> '.$e->getMessage().PHP_EOL);
+                $this->output->writeln('  <bg=yellow;fg=black> WARN </> ' . $e->getMessage() . PHP_EOL);
             }
         }
 
         $process->run(function ($type, $line) {
-            $this->output->write('    '.$line);
+            $this->output->write('    ' . $line);
         });
     }
 
@@ -148,7 +148,7 @@ class LaraVaultCommand extends Command
         });
 
         if (! $process->isSuccessful()) {
-            error('Failed to execute: '.implode(' ', $command));
+            error('Failed to execute: ' . implode(' ', $command));
 
             return false;
         }
@@ -165,19 +165,29 @@ class LaraVaultCommand extends Command
      */
     protected function replaceFiles($targetPath, $sourcePath)
     {
-        $filesystem = new Filesystem;
+        $filesystem = new Filesystem();
 
-        if ($filesystem->exists($targetPath)) {
-            if ($filesystem->isDirectory($targetPath)) {
-                $filesystem->deleteDirectory($targetPath);
-            } else {
-                $filesystem->delete($targetPath);
-            }
+        if (!$filesystem->exists($sourcePath)) {
+            info("Source path does not exist: $sourcePath");
+            return;
         }
 
         if ($filesystem->isDirectory($sourcePath)) {
+            // Ensure the target directory exists
+            $filesystem->ensureDirectoryExists($targetPath);
+
+            // Copy the directory contents
             $filesystem->copyDirectory($sourcePath, $targetPath);
         } else {
+            // Ensure the target directory exists
+            $filesystem->ensureDirectoryExists(dirname($targetPath));
+
+            // If the target file exists, delete it
+            if ($filesystem->exists($targetPath)) {
+                $filesystem->delete($targetPath);
+            }
+
+            // Copy the file
             $filesystem->copy($sourcePath, $targetPath);
         }
     }
@@ -190,7 +200,7 @@ class LaraVaultCommand extends Command
      */
     protected function packageResourcePath($path)
     {
-        return __DIR__.'/../../resources/'.$path;
+        return __DIR__ . '/../../resources/' . $path;
     }
 
     /**
@@ -201,6 +211,6 @@ class LaraVaultCommand extends Command
      */
     protected function packagePublicPath($path)
     {
-        return __DIR__.'/../../public/'.$path;
+        return __DIR__ . '/../../public/' . $path;
     }
 }
