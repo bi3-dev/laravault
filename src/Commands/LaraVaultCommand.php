@@ -10,7 +10,7 @@ use Symfony\Component\Process\Process;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
-use function Laravel\Prompts\note;
+use function Laravel\Prompts\warning;
 
 class LaraVaultCommand extends Command
 {
@@ -77,8 +77,8 @@ class LaraVaultCommand extends Command
         // Copy over the Blade anonymous components
         info('Copying anonymous blade components');
         $this->replaceFiles(
-            resource_path('views/components'),
-            $this->packageResourcePath('views/components')
+            resource_path('views/components/voidoflimbo'),
+            $this->packageResourcePath('views/voidoflimbo')
         );
         info('Anonymous blade components copied');
 
@@ -102,7 +102,10 @@ class LaraVaultCommand extends Command
         }
 
         // Display a note about replacing images in the public/img directory
-        note('You should probably replace followings in public/img \n - logo.png\n - logo.ico\n - login_bg.png');
+        warning('You should probably replace followings in public/img:');
+        warning('- logo.png ');
+        warning('- logo.ico  ');
+        warning('- login_bg.png');
 
         return 0;
     }
@@ -120,12 +123,12 @@ class LaraVaultCommand extends Command
             try {
                 $process->setTty(true);
             } catch (RuntimeException $e) {
-                $this->output->writeln('  <bg=yellow;fg=black> WARN </> '.$e->getMessage().PHP_EOL);
+                $this->output->writeln('  <bg=yellow;fg=black> WARN </> ' . $e->getMessage() . PHP_EOL);
             }
         }
 
         $process->run(function ($type, $line) {
-            $this->output->write('    '.$line);
+            $this->output->write('    ' . $line);
         });
     }
 
@@ -148,7 +151,7 @@ class LaraVaultCommand extends Command
         });
 
         if (! $process->isSuccessful()) {
-            error('Failed to execute: '.implode(' ', $command));
+            error('Failed to execute: ' . implode(' ', $command));
 
             return false;
         }
@@ -168,7 +171,7 @@ class LaraVaultCommand extends Command
         $filesystem = new Filesystem;
 
         if (! $filesystem->exists($sourcePath)) {
-            info("Source path does not exist: $sourcePath");
+            error("Source path does not exist: $sourcePath");
 
             return;
         }
@@ -201,7 +204,7 @@ class LaraVaultCommand extends Command
      */
     protected function packageResourcePath($path)
     {
-        return __DIR__.'/../../resources/'.$path;
+        return __DIR__ . '/../../resources/' . $path;
     }
 
     /**
@@ -212,6 +215,6 @@ class LaraVaultCommand extends Command
      */
     protected function packagePublicPath($path)
     {
-        return __DIR__.'/../../public/'.$path;
+        return __DIR__ . '/../../public/' . $path;
     }
 }
