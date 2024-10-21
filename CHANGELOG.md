@@ -2,6 +2,10 @@
 
 All notable changes to `laravault` will be documented in this file.
 
+## V 0.0.11 First Beta - 2024-10-21
+
+updated with new checks to counter first time install for images
+
 ## V 0.0.10-alfa - 2024-10-21
 
 New Command structure and base functionality testing
