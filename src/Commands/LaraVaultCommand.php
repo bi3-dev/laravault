@@ -120,12 +120,12 @@ class LaraVaultCommand extends Command
             try {
                 $process->setTty(true);
             } catch (RuntimeException $e) {
-                $this->output->writeln('  <bg=yellow;fg=black> WARN </> ' . $e->getMessage() . PHP_EOL);
+                $this->output->writeln('  <bg=yellow;fg=black> WARN </> '.$e->getMessage().PHP_EOL);
             }
         }
 
         $process->run(function ($type, $line) {
-            $this->output->write('    ' . $line);
+            $this->output->write('    '.$line);
         });
     }
 
@@ -148,7 +148,7 @@ class LaraVaultCommand extends Command
         });
 
         if (! $process->isSuccessful()) {
-            error('Failed to execute: ' . implode(' ', $command));
+            error('Failed to execute: '.implode(' ', $command));
 
             return false;
         }
@@ -190,7 +190,7 @@ class LaraVaultCommand extends Command
      */
     protected function packageResourcePath($path)
     {
-        return __DIR__ . '/../../resources/' . $path;
+        return __DIR__.'/../../resources/'.$path;
     }
 
     /**
@@ -201,6 +201,6 @@ class LaraVaultCommand extends Command
      */
     protected function packagePublicPath($path)
     {
-        return __DIR__ . '/../../public/' . $path;
+        return __DIR__.'/../../public/'.$path;
     }
 }
