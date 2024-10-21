@@ -60,7 +60,7 @@ class LaraVaultCommand extends Command
         $process->setTimeout($time);
         $process->setTty(Process::isTtySupported());
         $process->run(function ($type, $buffer) {
-            if (Process::ERR === $type) {
+            if ($type === Process::ERR) {
                 $this->error($buffer);
             } else {
                 $this->info($buffer);
@@ -68,7 +68,8 @@ class LaraVaultCommand extends Command
         });
 
         if (! $process->isSuccessful()) {
-            $this->error('Failed to execute: ' . implode(' ', $command));
+            $this->error('Failed to execute: '.implode(' ', $command));
+
             return false;
         }
 
@@ -95,6 +96,6 @@ class LaraVaultCommand extends Command
 
     protected function packageResourcePath($path)
     {
-        return __DIR__ . '/../../resources/' . $path;
+        return __DIR__.'/../../resources/'.$path;
     }
 }
