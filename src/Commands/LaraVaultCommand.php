@@ -2,17 +2,15 @@
 
 namespace Voidoflimbo\LaraVault\Commands;
 
-use RuntimeException;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use RuntimeException;
 use Symfony\Component\Process\Process;
 
-use function Laravel\Prompts\{
-    confirm,
-    info,
-    note,
-    error
-};
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\note;
 
 class LaraVaultCommand extends Command
 {
@@ -105,13 +103,13 @@ class LaraVaultCommand extends Command
 
         // Display a note about replacing images in the public/img directory
         note('You should probably replace followings in public/img \n - logo.png\n - logo.ico\n - login_bg.png');
+
         return 0;
     }
 
     /**
      * Run the given commands.
      *
-     * @param  array  $commands
      * @return void
      */
     protected function runCommands(array $commands)
@@ -122,20 +120,18 @@ class LaraVaultCommand extends Command
             try {
                 $process->setTty(true);
             } catch (RuntimeException $e) {
-                $this->output->writeln('  <bg=yellow;fg=black> WARN </> ' . $e->getMessage() . PHP_EOL);
+                $this->output->writeln('  <bg=yellow;fg=black> WARN </> '.$e->getMessage().PHP_EOL);
             }
         }
 
         $process->run(function ($type, $line) {
-            $this->output->write('    ' . $line);
+            $this->output->write('    '.$line);
         });
     }
 
     /**
      * Run a process with the given command.
      *
-     * @param  array  $command
-     * @param  int  $time
      * @return bool
      */
     protected function runProcess(array $command, int $time = 300)
@@ -152,7 +148,7 @@ class LaraVaultCommand extends Command
         });
 
         if (! $process->isSuccessful()) {
-            error('Failed to execute: ' . implode(' ', $command));
+            error('Failed to execute: '.implode(' ', $command));
 
             return false;
         }
@@ -169,7 +165,7 @@ class LaraVaultCommand extends Command
      */
     protected function replaceFiles($targetPath, $sourcePath)
     {
-        $filesystem = new Filesystem();
+        $filesystem = new Filesystem;
 
         if ($filesystem->exists($targetPath)) {
             if ($filesystem->isDirectory($targetPath)) {
@@ -194,7 +190,7 @@ class LaraVaultCommand extends Command
      */
     protected function packageResourcePath($path)
     {
-        return __DIR__ . '/../../resources/' . $path;
+        return __DIR__.'/../../resources/'.$path;
     }
 
     /**
@@ -205,6 +201,6 @@ class LaraVaultCommand extends Command
      */
     protected function packagePublicPath($path)
     {
-        return __DIR__ . '/../../public/' . $path;
+        return __DIR__.'/../../public/'.$path;
     }
 }
