@@ -13,6 +13,7 @@ class LaraVaultServiceProvider extends PackageServiceProvider
         $package
             ->name('laravault')
             ->hasConfigFile()
-            ->hasCommand(LaraVaultCommand::class);
+            ->hasCommand(LaraVaultCommand::class)
+        ;
     }
 }
