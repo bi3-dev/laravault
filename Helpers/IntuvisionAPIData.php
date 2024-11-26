@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Exceptions\CustomException;
 use App\Models\Detection;
 use Carbon\Carbon;
 use Exception;
@@ -12,12 +11,16 @@ use Illuminate\Support\Facades\Storage;
 class IntuvisionAPIData
 {
     private $guid;
+
     private $device_id;
+
     private $video_uri;
+
     private $image_path;
+
     private Carbon $event_timestamp;
 
-    private $imageDirectory = "event_detection";
+    private $imageDirectory = 'event_detection';
 
     public function __construct($event, $device)
     {
@@ -34,7 +37,7 @@ class IntuvisionAPIData
         $imagesrc = $event['frame']['img']['@src'];
 
         //* Co-ordinates for detection box received directly form event *//
-        $x  = $event['frame']['object']['x'];
+        $x = $event['frame']['object']['x'];
         $y = $event['frame']['object']['y'];
         $width = $event['frame']['object']['width'];
         $height = $event['frame']['object']['height'];
@@ -52,20 +55,17 @@ class IntuvisionAPIData
         $this->image_path = $this->storeImageInAzure($imageName, $image);
     }
 
-
     // This will look throught the attribute lists and find the value for the given key
     private function findAttribute($attributes, $name, $key = '@name')
     {
         // Log::channel('intuvisionlog')->info('Attributes received:', $attributes);
-        foreach ($attributes as $attribute)
-        {
-            if ($attribute[$key] === $name)
-            {
+        foreach ($attributes as $attribute) {
+            if ($attribute[$key] === $name) {
                 return $attribute['#text'];
             }
         }
 
-        return "";
+        return '';
     }
 
     // gets image format from base64 code
@@ -74,10 +74,10 @@ class IntuvisionAPIData
         $start = strpos($imageData, '/') + 1;
         $end = strpos($imageData, ';');
         $imageFormat = substr($imageData, $start, $end - $start);
-        if (!in_array($imageFormat, ['jpeg', 'png', 'jpg']))
-        {
-            throw new Exception("Image Format: " . $imageFormat . " not recognised or not accepted. Accepted formats are: jpg, jpeg and png", 400);
+        if (! in_array($imageFormat, ['jpeg', 'png', 'jpg'])) {
+            throw new Exception('Image Format: '.$imageFormat.' not recognised or not accepted. Accepted formats are: jpg, jpeg and png', 400);
         }
+
         return $imageFormat;
     }
 
@@ -85,6 +85,7 @@ class IntuvisionAPIData
     private function convertBase64ToImage($imageData)
     {
         $imageData = substr($imageData, strpos($imageData, ',') + 1);
+
         return base64_decode($imageData);
     }
 
@@ -99,22 +100,24 @@ class IntuvisionAPIData
         call_user_func("image$imageFormat", $image);
         $imageData = ob_get_clean();
         imagedestroy($image);
+
         return $imageData;
     }
 
     // generates and returns the image name
     private function getImageName($guid, $timestamp, $imageFormat)
     {
-        return 'image_' . str_replace(['+', ':', 'T', '-', ' '], '_', $timestamp) . '_' . $guid . '.' . $imageFormat;
+        return 'image_'.str_replace(['+', ':', 'T', '-', ' '], '_', $timestamp).'_'.$guid.'.'.$imageFormat;
     }
 
     // stores in azure and returns the url
     private function storeImageInAzure($imageName, $imageData)
     {
-        $imageInDirectory = $this->imageDirectory . "/" . $imageName;
+        $imageInDirectory = $this->imageDirectory.'/'.$imageName;
         Storage::disk('public')->put($imageInDirectory, $imageData);
-        Log::channel('intuvisionlog')->info("----------------> Image saved in AZURE for GUID: " . $this->guid);
-        return "storage/" . $imageInDirectory;
+        Log::channel('intuvisionlog')->info('----------------> Image saved in AZURE for GUID: '.$this->guid);
+
+        return 'storage/'.$imageInDirectory;
     }
 
     // saves the event into database as a new detection
@@ -122,17 +125,13 @@ class IntuvisionAPIData
     {
         $hasDetection = Detection::where('guid', $this->guid)->first();
 
-        if ($hasDetection)
-        {
+        if ($hasDetection) {
             // if the event was already saved in database then no need to save again
             return 1;
-            Log::channel('intuvisionlog')->info("----------------> Event was already saved for GUID: " . $this->guid . "\n\t" . $this->image_path);
-        }
-        else
-        {
+            Log::channel('intuvisionlog')->info('----------------> Event was already saved for GUID: '.$this->guid."\n\t".$this->image_path);
+        } else {
             // Save the new detection event and return if it ws success full, can add some validation here too.
-            try
-            {
+            try {
                 $detection = Detection::create([
                     'guid' => $this->guid,
                     'device_id' => $this->device_id,
@@ -143,9 +142,7 @@ class IntuvisionAPIData
                 Log::channel('intuvisionlog')->info("Event saved in DB for GUID: {$this->guid}\n\t{$this->image_path}");
 
                 return 1;
-            }
-            catch (Exception $ex)
-            {
+            } catch (Exception $ex) {
                 Log::channel('intuvisionlog')->error("Failed to save Suilvision job. Error: {$ex->getMessage()}", $this->toArray());
 
                 return 0;

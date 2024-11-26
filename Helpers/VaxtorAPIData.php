@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Exceptions\CustomException;
 use App\Models\Anpr;
 use Carbon\Carbon;
 use Exception;
@@ -12,14 +11,20 @@ use Illuminate\Support\Facades\Storage;
 class VaxtorAPIData
 {
     private $guid;
+
     private $device_id;
+
     private $image_path;
+
     private $plate_path;
+
     private $plate_number;
+
     private $direction_id;
+
     private $event_timestamp;
 
-    private $imageDirectory = "anpr_detection";
+    private $imageDirectory = 'anpr_detection';
 
     public function __construct($event, $device)
     {
@@ -31,17 +36,17 @@ class VaxtorAPIData
         $this->plate_number = $event['plate'];
         $this->direction_id = $event['direction'];        // Default
         // $this->event_timestamp = Carbon::parse($event['DateTimeRead'])->setTimezone('Europe/London');
-        $this->event_timestamp = date('Y-m-d H:i:s', strtotime($event['timestamp']));;
-        $this->guid = $this->plate_number . '-' . Carbon::parse($event['timestamp'],"UTC")->setTimezone("Europe/London")->toDateTimeString();
+        $this->event_timestamp = date('Y-m-d H:i:s', strtotime($event['timestamp']));
+        $this->guid = $this->plate_number.'-'.Carbon::parse($event['timestamp'], 'UTC')->setTimezone('Europe/London')->toDateTimeString();
 
         //coordinates for creating plate image
-        $left  = $event['left'];
+        $left = $event['left'];
         $top = $event['top'];
         $right = $event['right'];
         $bottom = $event['bottom'];
 
         //* Wrapping it in an array *//
-        $boundingCoords = array($left, $top, $right, $bottom);
+        $boundingCoords = [$left, $top, $right, $bottom];
 
         //* Image needs to be processed *//
         $imagesrc = $event['image'];
@@ -49,7 +54,7 @@ class VaxtorAPIData
         //* Processing Image *//
         $imageFormat = $this->getImageFormat($imagesrc);
 
-        Log::channel('vaxtorlog')->info("Format " . $imageFormat);
+        Log::channel('vaxtorlog')->info('Format '.$imageFormat);
 
         $imageData = $this->convertBase64ToImage($imagesrc);
         $mainImage = $this->addRectangleToImage($imageData, $imageFormat, $boundingCoords);
@@ -70,6 +75,7 @@ class VaxtorAPIData
     private function convertBase64ToImage($imageData)
     {
         $imageData = substr($imageData, strpos($imageData, ',') + 1);
+
         return base64_decode($imageData);
     }
 
@@ -84,18 +90,20 @@ class VaxtorAPIData
         call_user_func("image$imageFormat", $image);
         $imageData = ob_get_clean();
         imagedestroy($image);
+
         return $imageData;
     }
 
     private function cropImage($imageData, $imageFormat, $boundingCoords)
     {
         $image = imagecreatefromstring($imageData);
-        $rectangle = array("x" => $boundingCoords[0], "y" => $boundingCoords[1], "width" => ($boundingCoords[2] - $boundingCoords[0]), "height" => ($boundingCoords[3] - $boundingCoords[1]));
+        $rectangle = ['x' => $boundingCoords[0], 'y' => $boundingCoords[1], 'width' => ($boundingCoords[2] - $boundingCoords[0]), 'height' => ($boundingCoords[3] - $boundingCoords[1])];
         $cropped_image = imagecrop($image, $rectangle);
         ob_start();
         call_user_func("image$imageFormat", $cropped_image);
         $imageData = ob_get_clean();
         imagedestroy($image);
+
         return $imageData;
     }
 
@@ -105,26 +113,27 @@ class VaxtorAPIData
         $start = strpos($imageData, '/') + 1;
         $end = strpos($imageData, ';');
         $imageFormat = substr($imageData, $start, $end - $start);
-        if (!in_array($imageFormat, ['jpeg', 'png', 'jpg']))
-        {
-            throw new Exception("Image Format: " . $imageFormat . " not recognised or not accepted. Accepted formats are: jpg, jpeg and png", 400);
+        if (! in_array($imageFormat, ['jpeg', 'png', 'jpg'])) {
+            throw new Exception('Image Format: '.$imageFormat.' not recognised or not accepted. Accepted formats are: jpg, jpeg and png', 400);
         }
+
         return $imageFormat;
     }
 
     // generates and returns the image name
-    private function getImageName($guid, $timestamp, $imageFormat, $imageType = "anpr")
+    private function getImageName($guid, $timestamp, $imageFormat, $imageType = 'anpr')
     {
-        return $imageType . '_image_' . str_replace(['+', ':', 'T', '-', ' '], '_', $timestamp) . '_' . $guid . '.' . $imageFormat;
+        return $imageType.'_image_'.str_replace(['+', ':', 'T', '-', ' '], '_', $timestamp).'_'.$guid.'.'.$imageFormat;
     }
 
     // stores in azure and returns the url
     private function storeImageInAzure($imageName, $imageData, $imageType = 'ANPR')
     {
-        $imageInDirectory = $this->imageDirectory . "/" . $this->plate_number . "/" . $imageName;
+        $imageInDirectory = $this->imageDirectory.'/'.$this->plate_number.'/'.$imageName;
         Storage::disk('public')->put($imageInDirectory, $imageData);
-        Log::channel('vaxtorlog')->info("----------------> " . $imageType . " image saved in AZURE for GUID: " . $this->guid);
-        return "storage/" . $imageInDirectory;
+        Log::channel('vaxtorlog')->info('----------------> '.$imageType.' image saved in AZURE for GUID: '.$this->guid);
+
+        return 'storage/'.$imageInDirectory;
     }
 
     // saves the event into database as a new detection
@@ -133,18 +142,15 @@ class VaxtorAPIData
 
         $hasANPR = Anpr::where('guid', $this->guid)->first();
 
-        if ($hasANPR)
-        {
+        if ($hasANPR) {
             // if the event was already saved in database then no need to save again
-            Log::channel('vaxtorlog')->info("!!!!!------------> ANPR details was already saved for GUID: " . $this->guid . "\n\t" . $this->image_path . "\n\t" . $this->plate_path);
+            Log::channel('vaxtorlog')->info('!!!!!------------> ANPR details was already saved for GUID: '.$this->guid."\n\t".$this->image_path."\n\t".$this->plate_path);
+
             return 1;
-        }
-        else
-        {
+        } else {
 
             // Save the new detection event and return if it ws success full, can add some validation here too.
-            try
-            {
+            try {
 
                 $anpr = Anpr::create([
                     'guid' => $this->guid,
@@ -159,9 +165,7 @@ class VaxtorAPIData
                 Log::channel('vaxtorlog')->info("ANPR details saved for GUID: {$this->guid}\n\t{$this->image_path}\n\t{$this->plate_path}");
 
                 return 1;
-            }
-            catch (Exception $ex)
-            {
+            } catch (Exception $ex) {
                 Log::channel('vaxtorlog')->error("Failed to save ANPR details. Error: {$ex->getMessage()}", $this->toArray());
 
                 return 0;
